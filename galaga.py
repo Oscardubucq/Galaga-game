@@ -82,7 +82,7 @@ def update():
 
 def draw():
     screen.clear()
-    screen.blit("fond_étoilé",(0,0))
+    screen.blit("space",(0,0))
     for bullet in bullets:
         bullet.draw()
     
