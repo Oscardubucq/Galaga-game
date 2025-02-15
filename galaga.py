@@ -34,7 +34,7 @@ def update():
     global score
     global direction
     move_down = False
-
+    
     if ship.dead == False:
         if keyboard.left:
             ship.x -= speed
@@ -44,11 +44,64 @@ def update():
             ship.x += speed
             if ship.x >= WIDTH:
                 ship.x = WIDTH
-
+    
     for bullet in bullets:
         if bullet.y <= 0:
             bullets.remove(bullet)
         else:
             bullet.y-=10
+    
+    if len(enemies) == 0:
+        game_over()
+    if len(enemies) >0 and (enemies[-1].x > WIDTH-50 or enemies[0].x<50):
+        move_down = True
+        direction = direction*-1
+    for enemie in enemies:
+        enemie.x +=5*direction
+        if move_down == True :
+            enemie.y +=100
+        if enemie.y>HEIGHT :
+            enemies.remove(enemie)
+        
+        for bullet in bullets:
+            if enemie.colliderect(bullet):
+                score += 100
+                bullets.remove(bullet)
+                enemies.remove(enemie)
+                if len(enemies) ==0 :
+                    game_over()
+        
+        if enemie.colliderect(ship):
+            ship.dead =True
+    if ship.dead == True : 
+        ship.countdown -= 1
+    
+    if ship.countdown == 0:
+        ship.dead = False
+        ship.countdown = 60
 
+def draw():
+    screen.clear()
+    screen.blit("fond_étoilé",(0,0))
+    for bullet in bullets:
+        bullet.draw()
+    
+    for enemie in enemies:
+        enemie.draw()
+    
+    if ship.dead == False:
+        ship.draw()
+    
+    display_score()
+    if len (enemies) == 0:
+        game_over()
+pgzrun.go()
+    
+    
+    
+    
+    
+    
+    
 
+    
